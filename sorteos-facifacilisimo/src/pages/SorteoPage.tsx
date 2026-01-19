@@ -164,188 +164,122 @@ const SorteoPage = () => {
   const usuariosUnicos = new Set(comments.map(c => c.username)).size;
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-blue-900 via-gray-900 to-yellow-100 py-6 px-2 overflow-x-hidden">
-      <Toast ref={toast} position="top-center" />
-      
-      {/* Countdown overlay */}
-      {showCountdown && (
-        <Countdown onComplete={handleCountdownComplete} />
-      )}
-      
-      {/* Header principal más compacto */}
-      <div className="max-w-7xl mx-auto mb-8">
-        <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-white mb-2">🎯 Sorteo Facilísimo</h1>
-          <p className="text-gray-300 text-lg">Encuentra ganadores de forma rápida y transparente</p>
-        </div>
+  <div className="w-full min-h-screen bg-gradient-to-br from-blue-900 via-gray-900 to-yellow-100 py-4 sm:py-6 px-2 overflow-x-hidden">
+    <Toast ref={toast} position="top-center" />
 
-        {/* Estadísticas rápidas */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-blue-600/80 text-white text-center rounded-xl p-4 border-2 border-blue-500">
-            <div className="text-2xl font-bold">{formatNumber(totalComentarios)}</div>
-            <div className="text-sm">Comentarios</div>
-          </div>
-          <div className="bg-green-600/80 text-white text-center rounded-xl p-4 border-2 border-green-500">
-            <div className="text-2xl font-bold">{formatNumber(usuariosUnicos)}</div>
-            <div className="text-sm">Usuarios</div>
-          </div>
-          <div className="bg-yellow-600/80 text-white text-center rounded-xl p-4 border-2 border-yellow-500">
-            <div className="text-2xl font-bold">{formatNumber(winners.length)}</div>
-            <div className="text-sm">Ganadores</div>
-          </div>
-          <div className="bg-purple-600/80 text-white text-center rounded-xl p-4 border-2 border-purple-500">
-            <div className="text-2xl font-bold">{searchTerm || '-'}</div>
-            <div className="text-sm">Buscado</div>
-          </div>
-        </div>
+    {showCountdown && <Countdown onComplete={handleCountdownComplete} />}
+
+    {/* Header */}
+    <div className="max-w-7xl mx-auto mb-6 sm:mb-8">
+      <div className="text-center mb-4 sm:mb-6">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+          🎯 Sorteo Facilísimo
+        </h1>
+        <p className="text-gray-300 text-base sm:text-lg">
+          Encuentra ganadores de forma rápida y transparente
+        </p>
       </div>
 
-      {/* Layout principal: Filtros y Tabla lado a lado */}
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 mb-8">
-        
-        {/* Panel de Filtros - Más prominente */}
-        <div className="bg-gray-900/90 rounded-2xl border-2 border-yellow-400 shadow-xl p-6">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">🎯 Buscar Ganadores</h2>
-          
-          {/* Campo de título del sorteo */}
-          <div className="mb-6">
-            <label htmlFor="sorteoTitulo" className="block text-white font-semibold mb-2 text-center">
-              📝 Título del Sorteo
-            </label>
-            <input
-              type="text"
-              id="sorteoTitulo"
-              value={sorteoTitulo}
-              onChange={(e) => setSorteoTitulo(e.target.value)}
-              placeholder="Ej: Sorteo de Instagram, Promoción especial..."
-              className="w-full px-4 py-3 rounded-xl bg-gray-800/80 border-2 border-gray-700 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 text-white placeholder:text-gray-400 shadow-md transition-all duration-200 outline-none text-base text-center"
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        {[ 
+          { label: 'Comentarios', value: formatNumber(totalComentarios), color: 'blue' },
+          { label: 'Usuarios', value: formatNumber(usuariosUnicos), color: 'green' },
+          { label: 'Ganadores', value: formatNumber(winners.length), color: 'yellow' },
+          { label: 'Buscado', value: searchTerm || '-', color: 'purple' },
+        ].map((stat, i) => (
+          <div
+            key={i}
+            className={`bg-${stat.color}-600/80 text-white text-center rounded-xl p-3 sm:p-4 border-2`}
+          >
+            <div className="text-xl sm:text-2xl font-bold">{stat.value}</div>
+            <div className="text-xs sm:text-sm">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Layout principal */}
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
+
+      {/* FILTROS */}
+      <div className="bg-gray-900/90 rounded-2xl border-2 border-yellow-400 shadow-xl p-4 sm:p-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 text-center">
+          🎯 Buscar Ganadores
+        </h2>
+
+        {/* Título */}
+        <div className="mb-4 sm:mb-6">
+          <label className="block text-white font-semibold mb-2 text-center">
+            📝 Título del Sorteo
+          </label>
+          <input
+            type="text"
+            value={sorteoTitulo}
+            onChange={(e) => setSorteoTitulo(e.target.value)}
+            className="w-full px-4 py-2 sm:py-3 rounded-xl bg-gray-800 border-2 border-gray-700 focus:border-yellow-400 text-white text-sm sm:text-base text-center"
+          />
+        </div>
+
+        {/* Imagen */}
+        {imageUrl && (
+          <div className="mb-4 sm:mb-6 flex justify-center">
+            <img
+              src={imageUrl}
+              alt="Publicación"
+              className="max-w-[200px] sm:max-w-xs rounded-xl border-2 border-blue-400"
             />
           </div>
-          
-          {/* Imagen de la publicación */}
-          {imageUrl && (
-            <div className="mb-6 flex justify-center">
-              <div className="rounded-xl overflow-hidden shadow-lg border-2 border-blue-400 bg-blue-50 p-2">
-                <img
-                  src={imageUrl}
-                  alt="Publicación"
-                  className="max-w-xs rounded-lg object-contain aspect-[3/4]"
-                />
-              </div>
-            </div>
-          )}
+        )}
 
-          {/* Selector de fuente si es ambos */}
-          {platform === 'ambos' && (
-            <div className="mb-4 flex gap-2 justify-center">
+        {/* Botones plataforma */}
+        {platform === 'ambos' && (
+          <div className="mb-4 flex gap-2 justify-center flex-wrap">
+            {['ambos', 'instagram', 'facebook'].map((p) => (
               <button
-                className={`px-4 py-2 rounded-lg font-bold border-2 transition ${activeFilter === 'ambos' ? 'bg-green-500 text-white border-green-600' : 'bg-gray-800 text-white border-gray-600'}`}
-                onClick={() => setActiveFilter('ambos')}
-              >Ambos</button>
-              <button
-                className={`px-4 py-2 rounded-lg font-bold border-2 transition ${activeFilter === 'instagram' ? 'bg-pink-400 text-white border-pink-600' : 'bg-gray-800 text-white border-gray-600'}`}
-                onClick={() => setActiveFilter('instagram')}
-              >Instagram</button>
-              <button
-                className={`px-4 py-2 rounded-lg font-bold border-2 transition ${activeFilter === 'facebook' ? 'bg-blue-500 text-white border-blue-600' : 'bg-gray-800 text-white border-blue-600'}`}
-                onClick={() => setActiveFilter('facebook')}
-              >Facebook</button>
-            </div>
-          )}
-
-          {/* Filtros */}
-          <div className="bg-gray-800/50 rounded-xl p-4">
-            {platform === 'facebook' ? (
-              <FiltersFacebook onSearch={handleSearch} onFilterTypeChange={handleFilterTypeChange} />
-            ) : platform === 'instagram' ? (
-              <Filters onSearch={handleSearch} onFilterTypeChange={handleFilterTypeChange} />
-            ) : (
-              // Ambos: puedes usar el filtro de Instagram por defecto o mostrar ambos
-              <Filters onSearch={handleSearch} onFilterTypeChange={handleFilterTypeChange} />
-            )}
+                key={p}
+                onClick={() => setActiveFilter(p as any)}
+                className={`px-3 py-2 rounded-lg text-sm font-bold border-2 transition
+                  ${activeFilter === p
+                    ? 'bg-green-500 text-white'
+                    : 'bg-gray-800 text-white border-gray-600'}`}
+              >
+                {p}
+              </button>
+            ))}
           </div>
+        )}
 
-          {/* Tips rápidos */}
-          <div className="mt-6 p-4 bg-blue-900/30 rounded-xl border border-blue-400/30">
-            <h3 className="text-white font-semibold mb-2">💡 Tips rápidos:</h3>
-            <ul className="text-blue-100 text-sm space-y-1">
-              <li>• Usa <strong>número</strong> para buscar dígitos específicos</li>
-              <li>• Usa <strong>palabra</strong> para buscar texto</li>
-              <li>• Usa <strong>marcador</strong> para buscar símbolos</li>
-            </ul>
-          </div>
+        {/* Filtros */}
+        <div className="bg-gray-800/50 rounded-xl p-3 sm:p-4">
+          {platform === 'facebook' ? (
+            <FiltersFacebook onSearch={handleSearch} onFilterTypeChange={handleFilterTypeChange} />
+          ) : (
+            <Filters onSearch={handleSearch} onFilterTypeChange={handleFilterTypeChange} />
+          )}
         </div>
+      </div>
 
-        {/* Tabla de Comentarios - Más accesible */}
-        <div className="bg-gray-900/90 rounded-2xl border-2 border-blue-400 shadow-xl p-6">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">📝 Comentarios ({formatNumber(totalComentarios)})</h2>
-          <div className="bg-gray-800/50 rounded-xl p-4">
-            <div className="max-h-[60vh] overflow-y-auto">
+      {/* TABLA */}
+      <div className="bg-gray-900/90 rounded-2xl border-2 border-blue-400 shadow-xl p-4 sm:p-6 flex flex-col h-[70vh] sm:h-[80vh]">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 text-center">
+            📝 Comentarios ({formatNumber(totalComentarios)})
+          </h2>
+
+          {/* CONTENEDOR SCROLL REAL */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="overflow-x-auto sm:overflow-x-visible">
               <CommentsTable comments={comments} />
             </div>
-            {/* Mostrar mensaje si no hay ganadores */}
-            {winners.length === 0 && searchTerm && (
-              <div className="mt-4 text-center text-red-400 font-bold animate-pulse">
-                No hay ganadores para el criterio buscado.
-              </div>
-            )}
           </div>
         </div>
-      </div>
-
-      {/* Información de transparencia */}
-      <div className="max-w-4xl mx-auto mb-8">
-        <div className="bg-gradient-to-r from-green-600/20 to-blue-600/20 rounded-2xl p-6 border-2 border-green-500/30">
-          <h3 className="text-xl font-bold text-white mb-4 text-center">🔒 Transparencia Garantizada</h3>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="text-white font-semibold mb-2">✅ Proceso Transparente</h4>
-              <p className="text-gray-300 text-sm">
-                Todos los comentarios son procesados de forma transparente y los resultados son completamente aleatorios.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-2">🛡️ Seguridad Total</h4>
-              <p className="text-gray-300 text-sm">
-                Nuestro sistema garantiza que nadie pueda manipular los resultados. Cada sorteo es único y confiable.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Botones de navegación */}
-      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-4 justify-center mb-8">
-        <button
-          className="flex items-center justify-center gap-3 bg-blue-800 text-white font-semibold text-lg px-8 py-4 rounded-xl border-2 border-blue-700 hover:bg-blue-900 hover:shadow-lg transition-all duration-300"
-          onClick={() => {
-            localStorage.removeItem('comentarios');
-            localStorage.removeItem('comentarios_instagram');
-            localStorage.removeItem('comentarios_facebook');
-            localStorage.removeItem('imagenPublicacion');
-            localStorage.removeItem('plataforma');
-            setImageUrl(null); // 🔥 limpiar el estado
-            navigate('/');
-          }}
-        >
-          <i className="pi pi-home text-xl" /> Volver al inicio
-        </button>
-      </div>
-
-      {/* Dialogo de ganadores */}
-      <WinnerDialog
-        visible={dialogVisible}
-        comments={winners}
-        onHide={() => setDialogVisible(false)}
-        sorteoTitulo={sorteoTitulo}
-      />
-
-      {/* Footer */}
-      <footer className="text-gray-400 text-sm text-center w-full">
-        &copy; {new Date().getFullYear()} Sorteos Facilísimo. Hecho con <span className="text-red-500">♥</span> para tus sorteos.
-      </footer>
     </div>
-  );
-};
 
+    {/* Footer */}
+    <footer className="text-gray-400 text-xs sm:text-sm text-center pb-4">
+      &copy; {new Date().getFullYear()} Sorteos Facilísimo
+    </footer>
+  </div>
+);
+}
 export default SorteoPage;

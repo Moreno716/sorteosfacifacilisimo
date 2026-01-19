@@ -184,10 +184,26 @@ const GanadoresPage = () => {
         
         <ul className="mb-4 w-full max-w-md overflow-y-auto" style={{ maxHeight: '32vh' }}>
           {ganadores.map((winner, idx) => (
-            <li key={idx} className="mb-2 border-b border-gray-700 pb-1">
-              <span className="font-bold text-base text-blue-400">{idx + 1}. {winner.username}</span>
-              <span className="ml-2 text-xs px-2 py-0.5 rounded-full bg-gray-200 text-gray-800 font-semibold align-middle">{winner.platform ? (winner.platform === 'instagram' ? 'Instagram' : 'Facebook') : ''}</span>
-              <div className="text-gray-200 text-sm">{winner.comment}</div>
+            <li
+              key={idx}
+              className="mb-3 border-b border-gray-700 pb-3 flex flex-col items-center text-center"
+            >
+              {/* Nombre */}
+              <span className="font-bold text-base text-blue-400">
+                {idx + 1}. {winner.username}
+              </span>
+
+              {/* Plataforma */}
+              {winner.platform && (
+                <span className="mt-1 text-xs px-2 py-0.5 rounded-full bg-gray-200 text-gray-800 font-semibold">
+                  {winner.platform === 'instagram' ? 'Instagram' : 'Facebook'}
+                </span>
+              )}
+
+              {/* Comentario */}
+              <div className="mt-2 text-gray-200 text-sm">
+                {winner.comment}
+              </div>
             </li>
           ))}
         </ul>
